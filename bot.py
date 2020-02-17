@@ -1,3 +1,4 @@
+from selenium.webdriver.chrome.options import Options
 from selenium import webdriver
 from random import randint
 import time
@@ -27,7 +28,9 @@ def main():
     while i < 150:
         i += 1
         #j = str(randint(0, 276031))
-        driver = webdriver.Chrome()
+        options = Options()
+        options.headless=True
+        driver = webdriver.Chrome(options=options)
         driver.get('https://sharewood.biz/login/login')
         email = driver.find_element_by_name('login')
         password = driver.find_element_by_name('password')
