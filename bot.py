@@ -12,7 +12,7 @@ def read_csv():
     link = []
     name = []
 
-    with open('buisnes.csv', encoding='utf-8') as data:
+    with open('old/buisnes.csv', encoding='utf-8') as data:
         reader = csv.DictReader(data, delimiter=',')
         for i, row in enumerate(reader):
             if i > 0:

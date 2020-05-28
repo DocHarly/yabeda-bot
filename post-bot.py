@@ -1,67 +1,110 @@
-from selenium.webdriver.chrome.options import Options
 from selenium import webdriver
+from random import randint
+import time
 import csv
 import re
 
 def read_csv():
     desc = []
-    link = []
+    detail = []
     name = []
+    author = []
+    dwnld = []
 
-    with open('buisnes-link2.csv', encoding='utf-8') as data:
+    with open('sport-link.csv', encoding='utf-8') as data:
         reader = csv.DictReader(data, delimiter=',')
         for i, row in enumerate(reader):
-            if i > 0:
+            if i > 1649:   # > 207
+                author.append(row['author'])
                 name.append(row['name'])
                 desc.append(row['desc'])
-                link.append(row['link'])
-        return name, desc, link
+                detail.append(row['detail'])
+                dwnld.append(row['dwnld'])
+        return author, name, desc, detail, dwnld
 
 def main():
-    name, desc, link = read_csv()
+    author, name, desc, detail, dwnld = read_csv()
     #print(desc[1])
+    mail = ['DocHarly', 'split-i-split@yandex.ru']
+    pas = ['484715hp', 'Spliti7831']
+    logg = randint(0, 1)
 
-    # driver = webdriver.Chrome()
-    # driver.get('https://www.eldorado-land.ru/login/')
-    # email = driver.find_element_by_name('login')
-    # password = driver.find_element_by_name('password')
-    # email.send_keys('DocHarly')
-    # password.send_keys('484715hp')
-    # email.submit()
-
+    driver = webdriver.Chrome()
+    driver.get('https://www.eldoradoland.xyz/login/')
+    email = driver.find_element_by_name('login')
+    password = driver.find_element_by_name('password')
+    email.send_keys(mail[logg])
+    password.send_keys(pas[logg])
+    email.submit()
+    j = 0
     for i in range(len(name)):
-        if not name[i].strip():
+        if (name[i]=='') | (desc[i]=='') | (dwnld[i]==''):
             continue
         try:
-            #driver.get('https://www.eldorado-land.ru/form/2/select')
+            driver.get('https://www.eldoradoland.xyz/form/86/select')
 
             ###################
             ### Автор поста ###
             ###################
 
-            # post_form = driver.find_element_by_name('question[30]')
-            # try:
-            #     post_author = name[i].split('[', maxsplit=1)
-            #     post_author = post_author[1].split(']', maxsplit=1)
-            #     print(post_author[0])
-            #     post_form.send_keys(post_author[0])
-            # except:
-            #     post_form.send_keys('Неизвестен')
-            #
-            # ######################
-            # ### Название поста ###
-            # ######################
-            #
-            # post_form = driver.find_element_by_name('question[32]')
-            # post_name = name[i].split(']', maxsplit=1)
-            # post_form.send_keys(post_name[1])
+            post_form = driver.find_element_by_name('question[657]')
+            try:
+                post_author = author[i].split('\n')
+                if post_author[0] != '':
+                    post_form.send_keys(post_author[0])
+                else:
+                    post_form.send_keys('Неизвестен')
+            except:
+                post_form.send_keys('Неизвестен')
 
+            ######################
+            ### Название поста ###
+            ######################
 
-            #post_desc = re.split(r'Название:', desc[i])
-            #post_desc = re.split(r'(Подробнее:)|(Скачать:)', post_desc[-1])
-            #post_form = driver.find_element_by_xpath(".//div[@class='fr-element fr-view']/p[1]").send_keys(post_desc[0])
+            post_form = driver.find_element_by_name('question[658]')
+            post_name = name[i].split('\n')
+            print(post_name[0])
+            post_form.send_keys(post_name[0])
 
+            ##################
+            ### Тело поста ###
+            ##################
 
+            post_desc = desc[i].split('Скачать:')
+            post_form = driver.find_element_by_xpath(".//div[@class='fr-element fr-view']/p[1]").send_keys(post_desc[0])
+
+            #################
+            ### Подробнее ###
+            #################
+
+            post_form = driver.find_element_by_name('question[660]')
+            post_form.send_keys(detail[i])
+
+            ##############
+            ### Купить ###
+            ##############
+
+            hover = driver.find_element_by_class_name('formRow-explain')
+            webdriver.ActionChains(driver).move_to_element(hover).perform()
+            hover = driver.find_element_by_id('xfCustom_buy-2')
+            webdriver.ActionChains(driver).move_to_element(hover).perform()
+            post_form = driver.find_element_by_id('xfCustom_buy-2').click()
+            time.sleep(5)
+            post_form = driver.find_element_by_id('editor_hide_text').send_keys(dwnld[i])
+            post_form = driver.find_element_by_id('editor_hide_submit').click()
+            time.sleep(2)
+
+            ###############
+            ### Скачать ###
+            ###############
+
+            hover = driver.find_element_by_name('question[661]')
+            #webdriver.ActionChains(driver).move_to_element(hover).perform()
+            post_form = driver.find_element_by_name('question[661]')
+            post_form.send_keys(dwnld[i])
+
+            time.sleep(3)
+            post_form.submit()
 
         except:
             print("bad iteration " + str(i))

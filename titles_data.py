@@ -18,8 +18,8 @@ def get_html(url):
         'login': login,
         'password': password,
         'remember': 1,
-        '_xfRedirect': 'https: // sharewood.biz /',
-        '_xfToken': '1566908705, a56c7264ecc08da56bff9d85b3aedb23',
+        '_xfRedirect': 'https://sharewood.band/',
+        '_xfToken': '1584878454,ca6790d266ee5c80cec681b6b2bc3757',
 
     }
     with requests.Session() as s:
@@ -55,7 +55,7 @@ def get_all_data(html):
     return data
 
 def write_csv(data):
-    with open('raznoe-link.csv', 'a') as f:
+    with open('old/raznoe-link.csv', 'a') as f:
         writer = csv.writer(f, delimiter=',')
 
         writer.writerow((data['name'],
