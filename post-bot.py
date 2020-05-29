@@ -41,13 +41,13 @@ def main():
         if (name[i]=='') | (desc[i]=='') | (dwnld[i]==''):
             continue
         try:
-            driver.get('https://www.eldoradoland.xyz/form/86/select')
+            driver.get('https://www.eldoradoland.xyz/form/20/select')
 
             ###################
             ### Автор поста ###
             ###################
 
-            post_form = driver.find_element_by_name('question[657]')
+            post_form = driver.find_element_by_name('question[159]')
             try:
                 post_author = author[i].split('\n')
                 if post_author[0] != '':
@@ -61,7 +61,7 @@ def main():
             ### Название поста ###
             ######################
 
-            post_form = driver.find_element_by_name('question[658]')
+            post_form = driver.find_element_by_name('question[160]')
             post_name = name[i].split('\n')
             print(post_name[0])
             post_form.send_keys(post_name[0])
@@ -77,7 +77,7 @@ def main():
             ### Подробнее ###
             #################
 
-            post_form = driver.find_element_by_name('question[660]')
+            post_form = driver.find_element_by_name('question[162]')
             post_form.send_keys(detail[i])
 
             ##############
@@ -98,9 +98,9 @@ def main():
             ### Скачать ###
             ###############
 
-            hover = driver.find_element_by_name('question[661]')
+            hover = driver.find_element_by_name('question[163]')
             #webdriver.ActionChains(driver).move_to_element(hover).perform()
-            post_form = driver.find_element_by_name('question[661]')
+            post_form = driver.find_element_by_name('question[163]')
             post_form.send_keys(dwnld[i])
 
             time.sleep(3)
